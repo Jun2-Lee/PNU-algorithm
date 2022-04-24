@@ -1,11 +1,12 @@
 #include <iostream>
 #include <vector>
 #include <algorithm>
+#include <climits>
 
 using namespace std;
 struct work{
-	int pay = -1;
-	int day = -1;
+	int pay = 0;
+	int day = 0;
 };
 bool compare(const work& p1, const work& p2) {
 		return p1.pay > p2.pay;
@@ -43,6 +44,13 @@ int main() {
 		sort(table.begin(), table.end(), compare);
 	}
 
+	for (int i = 0; i < T; i++) {
+		for (int j = 0; j < k; j++) {
+			work temp;
+			temp.day = i + 1;
+			machine_table[i].push_back(temp);
+		}
+	}
 	for (int i = 0; i < table.size(); i++) {
 		if (machine_table[table[i].day - 1].size() == k) {
 			not_use.push_back(table[i]);
@@ -61,13 +69,18 @@ int main() {
 			}
 		}
 	}
+
 	max_pay = sum_pay(machine_table, T);
+
 	for (int i = T - 1; i >= 0; i--) {
 		for (int j = 0; j < k; j++) {
 			for (int idx = 0; idx < not_use.size(); idx++) {
 				if (not_use[idx].day >= i + 1) {
 					swap(not_use[idx], machine_table[i][j]);
-					if(max_pay - sum_pay(machine_table, T) < second_p && max_pay != sum_pay(machine_table, T)) second_p = max_pay - sum_pay(machine_table, T);
+					if (max_pay - sum_pay(machine_table, T) < second_p && max_pay != sum_pay(machine_table, T)) { 
+						
+						second_p = max_pay - sum_pay(machine_table, T); 
+					}
 					swap(not_use[idx], machine_table[i][j]);
 				}
 			}
